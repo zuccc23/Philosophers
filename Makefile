@@ -18,7 +18,8 @@ CC = gcc -g
 CFLAGS = -Wall -Wextra -Werror
 
 #SOURCE FILES
-SRC =	./src/main.c \
+SRC =	./src/main.c ./src/parsing.c ./src/utils.c ./src/errors.c \
+		./src/init.c
 
 #DIRECTORIES
 OBJ_DIR = obj
