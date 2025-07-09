@@ -19,7 +19,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 #SOURCE FILES
 SRC =	./src/main.c ./src/parsing.c ./src/utils.c ./src/errors.c \
-		./src/init.c
+		./src/init.c ./src/time_utils.c ./src/free.c ./src/routine.c \
+		./src/routine_utils.c
 
 #DIRECTORIES
 OBJ_DIR = obj

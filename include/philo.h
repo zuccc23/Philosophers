@@ -19,14 +19,9 @@ typedef struct s_philo {
 	struct s_data *data;       // Pointer to shared data
 } t_philo;
 
-typedef struct s_mutex {
-	pthread_mutex_t* mutex;
-    int thread_num;
-} t_mutex;
-
 //stucture of overall data
 typedef struct s_data {
-	int num_philosophers;
+	int num_philo;
 	int time_to_die;
 	int time_to_eat;
 	int time_to_sleep;
@@ -38,17 +33,31 @@ typedef struct s_data {
 	pthread_mutex_t print_mutex;
 	pthread_mutex_t death_mutex;
 	pthread_t *threads;
-	t_philo *philosophers;
+	t_philo *philos;
 } t_data;
 
 // INIT ///////////////////////////////////////
 
 void	init_data(t_data *data);
+void	init_philos(t_data *data);
+void	init_forks(t_data *data);
 
 // PARSING ////////////////////////////////////
 
 int		parser(int ac, char **av, t_data *data);
 int		get_args(char **av, t_data *data);
+
+// ROUTINE
+
+void	*philo_routine(void *arg);
+void	pickup_forks(t_philo *philo);
+void	eat(t_philo *philo);
+void	putdown_forks(t_philo *philo);
+
+// ROUTINE UTILS //////////////////////////////
+
+void	print_state(t_philo *philo, int state);
+int		is_even(int n);
 
 // UTILS //////////////////////////////////////
 
@@ -58,9 +67,19 @@ size_t	ft_strlen(const char *str);
 long	ft_atoll(const char *str);
 void	ft_putsterr(char *s);
 
+// TIME UTILS /////////////////////////////////
+
+long	get_start_time(void);
+long	timestamp(long start_time);
+
 // ERRORS
 
 int		print_err(int er_code);
+
+// FREE ////////////////////////////////////////
+
+void	destroy_mutexes(t_data *data);
+void	*check_death(void *arg);
 
 // MACROS //////////////////////////////////////
 
@@ -68,5 +87,14 @@ int		print_err(int er_code);
 # define TOO_LONG 2
 # define NUMBER_TOO_SMALL 3
 # define TOO_FEW_ARGS 4
+
+typedef enum state
+{
+	FORK,
+	EAT,
+	SLEEP,
+	THINK,
+	DIE
+}	state;
 
 #endif

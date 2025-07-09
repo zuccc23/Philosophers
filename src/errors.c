@@ -8,7 +8,7 @@ int	print_err(int er_code)
 	if (er_code == TOO_LONG)
 		ft_putsterr("Some of the arguments are too long.\n");
 	if (er_code == NUMBER_TOO_SMALL)
-		ft_putsterr("All arguments must be positive integers.\n");
+		ft_putsterr("Some of the arguments are too small.\n");
 	if (er_code == TOO_FEW_ARGS)
 		ft_putsterr("Not enough arguments.\n");
 	return (1);
