@@ -8,13 +8,10 @@ void	*philo_routine(void *arg)
 	while (1)
 	{
 		pickup_forks(philo);
-		// print_state(philo, EAT);
-		// philo->last_meal_time = get_start_time();
-		// usleep(philo->data->time_to_eat);
 		eat(philo);
 		putdown_forks(philo);
 		print_state(philo, SLEEP);
-		usleep(philo->data->time_to_sleep);
+		usleep(philo->data->time_to_sleep * 1000);
 		print_state(philo, THINK);
 	}
 	return (NULL);
@@ -47,8 +44,10 @@ void	pickup_forks(t_philo *philo)
 void	eat(t_philo *philo)
 {
 	print_state(philo, EAT);
-	philo->last_meal_time = get_start_time(); //protect
-	usleep(philo->data->time_to_eat);
+	pthread_mutex_lock(&philo->meal_time);
+	philo->last_meal_time = get_current_time();
+	pthread_mutex_unlock(&philo->meal_time);
+	usleep(philo->data->time_to_eat * 1000);
 }
 
 void	putdown_forks(t_philo *philo)

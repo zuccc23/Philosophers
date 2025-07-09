@@ -3,7 +3,7 @@
 int	main(int ac, char **av)
 {
 	t_data		data;
-	pthread_t	check;
+	int			i = 0;
 
 	// INIT DATA
 	init_data(&data);
@@ -24,55 +24,66 @@ int	main(int ac, char **av)
 	if (!data.forks)
 		return (1); //+free
 
-	//INIT FORKS & PHILOS
-	init_forks(&data);
+	//TEST PRINTS
+	printf("philos: %d\n", data.num_philo);
+	printf("death: %d\n", data.time_to_die);
+	printf("eat: %d\n", data.time_to_eat);
+	printf("sleep: %d\n", data.time_to_sleep);
+
+	//INIT FORKS & PHILOS 
+	init_mutexes(&data);
 	init_philos(&data);
-	data.start_time = get_start_time();
+	data.start_time = get_current_time();
+
+	// usleep(500 * 1000);
+	// data.philos[0].last_meal_time = get_current_time();
+	// usleep(300 * 1000);
+	// printf("%ld\n", time_since_meal(data.philos[0].last_meal_time));
 
 	//ROUTINE
-	pthread_create(&check, NULL, check_death, &data);
-	pthread_create(&data.threads[0], NULL, philo_routine, &data.philos[0]);
-	pthread_create(&data.threads[1], NULL, philo_routine, &data.philos[1]);
-	pthread_create(&data.threads[2], NULL, philo_routine, &data.philos[2]);
-	pthread_create(&data.threads[3], NULL, philo_routine, &data.philos[3]);
-	pthread_join(check, NULL);
-	pthread_join(data.threads[0], NULL);
-	pthread_join(data.threads[1], NULL);
-	pthread_join(data.threads[2], NULL);
-	pthread_join(data.threads[3], NULL);
+	while (i < data.num_philo)
+	{
+		pthread_create(&data.threads[i], NULL, philo_routine, &data.philos[i]);
+		i++;
+	}
+
+	//CHECK DEATH
+	check_death(&data);
+	i = 0;
+	while (i < data.num_philo)
+	{
+		pthread_join(data.threads[i], NULL);
+		i++;
+	}
 
 	//FREE STUFF
-	destroy_mutexes(&data);
+	// destroy_mutexes(&data);
 	return (0);
 }
 
-void	*check_death(void *arg)
+void	check_death(t_data *data)
 {
-	t_data	*data;
 	int		i;
 
-	i = 0;
-	data = (t_data *)arg;
 	while (1)
 	{
+		i = 0;
 		while (i < data->num_philo)
 		{
-			if (data->philos[i].last_meal_time == 0)
+			// pthread_mutex_lock(&data->philos[i].meal_time);
+			if (time_since_meal(data->philos[i].last_meal_time) > data->time_to_die && data->philos[i].last_meal_time != 0)
 			{
-				if (get_start_time() - data->start_time > data->time_to_die)
-				{
-					print_state(&data->philos[i], DIE);
-				}
-			}
-			else
-			{
-				if (get_start_time() - data->philos[i].last_meal_time > data->time_to_die)
-				{
-					print_state(&data->philos[i], DIE);
-				}
+				print_state(&data->philos[i], DIE);
+				printf("%ld\n", time_since_meal(data->philos[i].last_meal_time));
+				pthread_mutex_lock(&data->death_mutex);
+				data->simulation_over = 1;
+				pthread_mutex_unlock(&data->death_mutex);
+				// pthread_mutex_unlock(&data->philos[i].meal_time);
+				return ;
 			}
 			i++;
 		}
 	}
-	return (NULL);
 }
+
+			

@@ -19,7 +19,7 @@ void	init_data(t_data *data)
 }
 
 // mutex_init the fork array
-void	init_forks(t_data *data)
+void	init_mutexes(t_data *data)
 {
 	int	i;
 
@@ -27,6 +27,14 @@ void	init_forks(t_data *data)
 	while (i < data->num_philo)
 	{
 		pthread_mutex_init(&data->forks[i], NULL);
+		i++;
+	}
+	pthread_mutex_init(&data->print_mutex, NULL);
+	pthread_mutex_init(&data->death_mutex, NULL);
+	i = 0;
+	while (i < data->num_philo)
+	{
+		pthread_mutex_init(&data->philos[i].meal_time, NULL);
 		i++;
 	}
 }

@@ -4,8 +4,9 @@ void	print_state(t_philo *philo, int state)
 {
 	long	time;
 
-	pthread_mutex_lock(&philo->data->print_mutex);
+	
 	time = timestamp(philo->data->start_time);
+	pthread_mutex_lock(&philo->data->print_mutex);
 	if (state == FORK)
 		printf("{%ld} philo[%d] has taken a fork\n", time, philo->id);
 	if (state == EAT)

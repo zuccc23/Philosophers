@@ -1,7 +1,7 @@
 #include "../include/philo.h"
 
-// get the start time of the simulation
-long	get_start_time(void)
+// get the current time in milliseconds
+long	get_current_time(void)
 {
 	long	start_time;
 	struct timeval	tv;
@@ -24,4 +24,12 @@ long	timestamp(long start_time)
 	return (timestamp);
 }
 
-// tv.tv_sec * 1000 + tv.tv_usec / 1000
+long	time_since_meal(long last_meal)
+{
+	struct timeval	tv;
+	long	current_time;
+
+	gettimeofday(&tv, NULL);
+	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (current_time - last_meal);
+}

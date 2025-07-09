@@ -12,4 +12,7 @@ void	destroy_mutexes(t_data *data)
 		i++;
 	}
 	free(data->forks);
+	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->death_mutex);
+	// pthread_mutex_destroy(&data->meal_time);
 }

@@ -16,6 +16,7 @@ typedef struct s_philo {
 	long last_meal_time;       // Timestamp of last meal
 	pthread_mutex_t *left_fork;
 	pthread_mutex_t *right_fork;
+	pthread_mutex_t meal_time;
 	struct s_data *data;       // Pointer to shared data
 } t_philo;
 
@@ -40,7 +41,7 @@ typedef struct s_data {
 
 void	init_data(t_data *data);
 void	init_philos(t_data *data);
-void	init_forks(t_data *data);
+void	init_mutexes(t_data *data);
 
 // PARSING ////////////////////////////////////
 
@@ -69,8 +70,9 @@ void	ft_putsterr(char *s);
 
 // TIME UTILS /////////////////////////////////
 
-long	get_start_time(void);
+long	get_current_time(void);
 long	timestamp(long start_time);
+long	time_since_meal(long last_meal);
 
 // ERRORS
 
@@ -79,7 +81,7 @@ int		print_err(int er_code);
 // FREE ////////////////////////////////////////
 
 void	destroy_mutexes(t_data *data);
-void	*check_death(void *arg);
+void	check_death(t_data *data);
 
 // MACROS //////////////////////////////////////
 
