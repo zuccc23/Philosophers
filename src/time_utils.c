@@ -24,6 +24,7 @@ long	timestamp(long start_time)
 	return (timestamp);
 }
 
+//calculates the time passed since the last meal eaten
 long	time_since_meal(long last_meal)
 {
 	struct timeval	tv;
@@ -32,4 +33,19 @@ long	time_since_meal(long last_meal)
 	gettimeofday(&tv, NULL);
 	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	return (current_time - last_meal);
+}
+
+void	sleep_v2(t_philo *philo, long time)
+{
+	long	start;
+
+	start = get_current_time();
+	while (1)
+	{
+		if (check_sim_over(philo) == 1)
+			return ;
+		if (get_current_time() - start >= time)
+			return ;
+		usleep(500);
+	}
 }

@@ -5,20 +5,26 @@ void	*philo_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	while (1)
+	while (check_sim_over(philo) == 0)
 	{
 		pickup_forks(philo);
 		eat(philo);
 		putdown_forks(philo);
-		print_state(philo, SLEEP);
-		usleep(philo->data->time_to_sleep * 1000);
-		print_state(philo, THINK);
+		if (check_sim_over(philo) == 0)
+		{
+			print_state(philo, SLEEP);
+			sleep_v2(philo, philo->data->time_to_sleep);
+			if (check_sim_over(philo) == 0)
+				print_state(philo, THINK);
+		}
 	}
 	return (NULL);
 }
 
 void	pickup_forks(t_philo *philo)
 {
+	if (check_sim_over(philo) == 1)
+		return ;
 	if (is_even(philo->id) == 0)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -43,11 +49,13 @@ void	pickup_forks(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
+	if (check_sim_over(philo) == 1)
+		return ;
 	print_state(philo, EAT);
 	pthread_mutex_lock(&philo->meal_time);
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(&philo->meal_time);
-	usleep(philo->data->time_to_eat * 1000);
+	sleep_v2(philo, philo->data->time_to_eat);
 }
 
 void	putdown_forks(t_philo *philo)

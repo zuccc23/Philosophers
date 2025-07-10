@@ -10,7 +10,8 @@
 # include <semaphore.h>
 
 //structure of 1 philosopher
-typedef struct s_philo {
+typedef struct s_philo 
+{
 	int id;                    // Philosopher number (1 to N)
 	int meals_eaten;           // Number of meals eaten
 	long last_meal_time;       // Timestamp of last meal
@@ -21,7 +22,8 @@ typedef struct s_philo {
 } t_philo;
 
 //stucture of overall data
-typedef struct s_data {
+typedef struct s_data 
+{
 	int num_philo;
 	int time_to_die;
 	int time_to_eat;
@@ -48,7 +50,7 @@ void	init_mutexes(t_data *data);
 int		parser(int ac, char **av, t_data *data);
 int		get_args(char **av, t_data *data);
 
-// ROUTINE
+// ROUTINE ////////////////////////////////////
 
 void	*philo_routine(void *arg);
 void	pickup_forks(t_philo *philo);
@@ -59,6 +61,7 @@ void	putdown_forks(t_philo *philo);
 
 void	print_state(t_philo *philo, int state);
 int		is_even(int n);
+int		check_sim_over(t_philo *philo);
 
 // UTILS //////////////////////////////////////
 
@@ -73,6 +76,7 @@ void	ft_putsterr(char *s);
 long	get_current_time(void);
 long	timestamp(long start_time);
 long	time_since_meal(long last_meal);
+void	sleep_v2(t_philo *philo, long time);
 
 // ERRORS
 

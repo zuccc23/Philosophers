@@ -4,7 +4,6 @@ void	print_state(t_philo *philo, int state)
 {
 	long	time;
 
-	
 	time = timestamp(philo->data->start_time);
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (state == FORK)
@@ -27,4 +26,19 @@ int	is_even(int n)
 	if (n % 2 == 0)
 		return (0);
 	return (1);
+}
+
+//checks if simulation_over has been set to 1
+//returns 1 if its set to 1,
+//otherwise 0
+int	check_sim_over(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->simulation_over == 1)
+	{
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->data->death_mutex);
+	return (0);
 }

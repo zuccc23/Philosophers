@@ -35,10 +35,9 @@ int	main(int ac, char **av)
 	init_philos(&data);
 	data.start_time = get_current_time();
 
-	// usleep(500 * 1000);
-	// data.philos[0].last_meal_time = get_current_time();
+	// sleep_v2(&data.philos[0], 300);
 	// usleep(300 * 1000);
-	// printf("%ld\n", time_since_meal(data.philos[0].last_meal_time));
+	// printf("%ld\n", timestamp(data.start_time));
 
 	//ROUTINE
 	while (i < data.num_philo)
@@ -57,7 +56,7 @@ int	main(int ac, char **av)
 	}
 
 	//FREE STUFF
-	// destroy_mutexes(&data);
+	destroy_mutexes(&data);
 	return (0);
 }
 
@@ -70,17 +69,17 @@ void	check_death(t_data *data)
 		i = 0;
 		while (i < data->num_philo)
 		{
-			// pthread_mutex_lock(&data->philos[i].meal_time);
+			pthread_mutex_lock(&data->philos[i].meal_time);
 			if (time_since_meal(data->philos[i].last_meal_time) > data->time_to_die && data->philos[i].last_meal_time != 0)
 			{
 				print_state(&data->philos[i], DIE);
-				printf("%ld\n", time_since_meal(data->philos[i].last_meal_time));
 				pthread_mutex_lock(&data->death_mutex);
 				data->simulation_over = 1;
 				pthread_mutex_unlock(&data->death_mutex);
-				// pthread_mutex_unlock(&data->philos[i].meal_time);
+				pthread_mutex_unlock(&data->philos[i].meal_time);
 				return ;
 			}
+			pthread_mutex_unlock(&data->philos[i].meal_time);
 			i++;
 		}
 	}
