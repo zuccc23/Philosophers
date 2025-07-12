@@ -14,13 +14,13 @@ MAGENTA = \033[35m
 CYAN = \033[36m
 
 #COMPILER AND FLAGS
-CC = gcc -g
-CFLAGS = -Wall -Wextra -Werror
+CC = cc 
+CFLAGS = -pthread -Wall -Wextra -Werror -g3
 
 #SOURCE FILES
 SRC =	./src/main.c ./src/parsing.c ./src/utils.c ./src/errors.c \
 		./src/init.c ./src/time_utils.c ./src/free.c ./src/routine.c \
-		./src/routine_utils.c
+		./src/routine_utils.c ./src/simulation_over.c 
 
 #DIRECTORIES
 OBJ_DIR = obj

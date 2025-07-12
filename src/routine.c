@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dahmane <dahmane@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 12:45:12 by dahmane           #+#    #+#             */
+/*   Updated: 2025/07/12 14:19:45 by dahmane          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 void	*philo_routine(void *arg)
@@ -55,6 +67,9 @@ void	eat(t_philo *philo)
 	pthread_mutex_lock(&philo->meal_time);
 	philo->last_meal_time = get_current_time();
 	pthread_mutex_unlock(&philo->meal_time);
+	pthread_mutex_lock(&philo->meal_count);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->meal_count);
 	sleep_v2(philo, philo->data->time_to_eat);
 }
 

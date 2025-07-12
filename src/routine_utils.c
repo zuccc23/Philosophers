@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dahmane <dahmane@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 12:45:16 by dahmane           #+#    #+#             */
+/*   Updated: 2025/07/12 12:46:58 by dahmane          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 void	print_state(t_philo *philo, int state)
@@ -5,6 +17,8 @@ void	print_state(t_philo *philo, int state)
 	long	time;
 
 	time = timestamp(philo->data->start_time);
+	if (check_sim_over(philo) == 1)
+		return ;
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (state == FORK)
 		printf("{%ld} philo[%d] has taken a fork\n", time, philo->id);

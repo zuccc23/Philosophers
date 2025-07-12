@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dahmane <dahmane@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 12:45:45 by dahmane           #+#    #+#             */
+/*   Updated: 2025/07/12 13:11:11 by dahmane          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
 //sets data values to 0 or NULL
@@ -12,8 +24,6 @@ void	init_data(t_data *data)
 	data->simulation_over = 0;
 	data->er_code = 0;
 	data->forks = NULL;
-	// data->print_mutex =
-	//data->death_mutex =
 	data->threads = NULL;
 	data->philos = NULL;
 }
@@ -35,6 +45,7 @@ void	init_mutexes(t_data *data)
 	while (i < data->num_philo)
 	{
 		pthread_mutex_init(&data->philos[i].meal_time, NULL);
+		pthread_mutex_init(&data->philos[i].meal_count, NULL);
 		i++;
 	}
 }
@@ -62,4 +73,32 @@ void	init_philos(t_data *data)
 		data->philos[i].data = data;
 		i++;
 	}
+}
+
+void	init_mut_and_philos(t_data *data)
+{
+	init_mutexes(data);
+	init_philos(data);
+	data->start_time = get_current_time();
+}
+
+int	allocate_data(t_data *data)
+{
+	data->philos = malloc(sizeof(t_philo) * data->num_philo);
+	if (!data->philos)
+		return (1);
+	data->threads = malloc(sizeof(pthread_t) * data->num_philo);
+	if (!data->threads)
+	{
+		free(data->philos);
+		return (1);
+	}
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_philo);
+	if (!data->forks)
+	{
+		free(data->philos);
+		free(data->threads);
+		return (1);
+	}
+	return (0);
 }
